@@ -1,5 +1,7 @@
 import { defineComponent, PropType, ref, unref } from 'vue';
 import {
+  type ColumnSlotCallback,
+  type HandleProps,
   type ComponentProps,
   type ComponentSize,
   type TableColumnProps,
@@ -10,8 +12,9 @@ import {
   DEFAULT_PAGE_LAYOUT,
   DEFAULT_PAGE_SIZE,
   DEFAULT_SIZE,
-  DEFAULT_SLOT_PREFIX,
+  DEFAULT_COLUMN_SLOT_PREFIX,
   COMPONENT_SIZE_LIST,
+  DEFAULT_HANDLE_SLOT_KEY,
 } from './constant.ts';
 import './index.css';
 import { Refresh, Operation, Open } from '@element-plus/icons-vue';
@@ -27,6 +30,10 @@ const CuElementTable = defineComponent({
     table: {
       type: Object as PropType<TableProps>,
       required: true,
+    },
+    handleList: {
+      type: Array as PropType<HandleProps[]>,
+      default: () => [],
     },
     // Pagination
     total: {
@@ -47,20 +54,25 @@ const CuElementTable = defineComponent({
     'update:pageSize',
     'size-change',
     'table-refresh',
+    'handle-click',
   ],
   setup(props: ComponentProps, { slots, emit }) {
     const _size = ref(props.size);
     // 根据column的prop属性，获取对应的插槽内容
-    function getSlot(column: TableColumnProps) {
-      const slotName = `${DEFAULT_SLOT_PREFIX}${column.prop}`;
+    function getColumnSlot(column: TableColumnProps) {
+      const slotName = `${DEFAULT_COLUMN_SLOT_PREFIX}${column.prop}`;
       return slots[slotName];
+    }
+    // 获取handleLeft的prop属性，获取对应的插槽内容
+    function getHandleSlot() {
+      return slots[DEFAULT_HANDLE_SLOT_KEY];
     }
     // 根据ElTableColumn的默认插槽default，放入我们自定义的插槽内容
     function renderTableColumn(column: TableColumnProps) {
       const columnSlots: {
-        default?: (scope: Record<string, any>) => any;
+        default?: ColumnSlotCallback;
       } = {};
-      const slot = getSlot(column);
+      const slot = getColumnSlot(column);
       if (slot)
         columnSlots.default = (scope: Record<string, any>) => slot(scope);
 
@@ -101,6 +113,32 @@ const CuElementTable = defineComponent({
     }
     // 生成Handle
     function renderHandle() {
+      // 左侧可配置options，或者slot
+      function renderLeft() {
+        // 通用左侧按钮点击
+        const handleClick = (key: string) => {
+          emit('handle-click', key);
+        };
+        const slot = getHandleSlot();
+        return (
+          <>
+            <div className="cuHandleLeftBtnBox">
+              {(props.handleList || []).map((item) => {
+                return (
+                  <el-button
+                    key={item.key}
+                    type={item.type || ''}
+                    onClick={item.action ?? (() => handleClick(item.key))}
+                  >
+                    {item.label}
+                  </el-button>
+                );
+              })}
+            </div>
+            <div className="cuHandleLeftSlotBox">{slot && slot()}</div>
+          </>
+        );
+      }
       function renderRight() {
         const dropdownSlot = {
           default: () => <el-button circle icon={Operation}></el-button>,
@@ -146,8 +184,8 @@ const CuElementTable = defineComponent({
       }
       return (
         <>
-          <div className="cuLeftBox"></div>
-          <div className="cuRightBox">{renderRight()}</div>
+          <div className="cuHandleLeftBox">{renderLeft()}</div>
+          <div className="cuHandleRightBox">{renderRight()}</div>
         </>
       );
     }

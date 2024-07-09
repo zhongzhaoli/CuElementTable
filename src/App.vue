@@ -5,6 +5,7 @@
         columns: tableColumns,
         data: tableData,
       }"
+      :handle-list="handleList"
       :total="total"
       v-model:current-page="currentPage"
     >
@@ -15,9 +16,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import CuElementTable from './components/CuElementTable/index.tsx';
-import { type TableColumnProps } from './components/CuElementTable/types.ts';
+import {
+  HandleProps,
+  type TableColumnProps,
+} from './components/CuElementTable/types.ts';
 const tableColumns: TableColumnProps[] = [
   {
     label: '',
@@ -75,11 +79,19 @@ const tableData = [
     tag: 'Office',
   },
 ];
+const handleList: HandleProps[] = [
+  {
+    key: 'create',
+    label: '新增',
+    type: 'primary',
+  },
+  {
+    key: 'delete',
+    label: '删除',
+    type: 'danger',
+  },
+];
 const total = 100;
 const currentPage = ref(2);
-
-watchEffect(() => {
-  console.log(currentPage.value);
-});
 </script>
 <style scoped></style>

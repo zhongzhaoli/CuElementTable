@@ -1,7 +1,10 @@
 import { ComponentSize } from './types';
 
 // 表格插槽前缀
-export const DEFAULT_SLOT_PREFIX: string = 'table-';
+export const DEFAULT_COLUMN_SLOT_PREFIX: string = 'table-';
+
+// 操作按钮插槽Key
+export const DEFAULT_HANDLE_SLOT_KEY: string = 'handle-left';
 
 // 默认组件大小
 export const DEFAULT_SIZE: ComponentSize = 'default';

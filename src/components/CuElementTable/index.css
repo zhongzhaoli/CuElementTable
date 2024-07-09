@@ -4,11 +4,14 @@
   justify-content: space-between;
   margin-bottom: 16px;
 }
-.cuElementTableContainer > .cuHandleBox > .cuRightBox {
+.cuElementTableContainer > .cuHandleBox > .cuHandleRightBox {
   display: flex;
   align-items: center;
 }
-.cuElementTableContainer > .cuHandleBox > .cuRightBox > div:not(:last-child) {
+.cuElementTableContainer
+  > .cuHandleBox
+  > .cuHandleRightBox
+  > div:not(:last-child) {
   margin-right: 16px;
 }
 .cuElementTableContainer > .cuPaginationBox {
