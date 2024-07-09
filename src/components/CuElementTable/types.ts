@@ -1,5 +1,6 @@
 import { type ElTableColumn, ElTable } from 'element-plus/lib/components/table';
 import { type ElButton } from 'element-plus/lib/components/button';
+import { Ref } from 'vue';
 type ElTableProps = InstanceType<typeof ElTable>['$props'];
 type ElTableColumnProps = InstanceType<typeof ElTableColumn>['$props'];
 type ElButtonProps = InstanceType<typeof ElButton>['$props'];
@@ -7,6 +8,9 @@ type ElButtonProps = InstanceType<typeof ElButton>['$props'];
 export interface TableColumnProps extends ElTableColumnProps {}
 export interface TableProps extends ElTableProps {
   columns: TableColumnProps[];
+}
+export interface HandleColumnProps extends TableColumnProps {
+  show: Ref<boolean>;
 }
 export type TableDataProps = { [key: string]: any };
 export type ComponentSize = 'large' | 'default' | 'small';

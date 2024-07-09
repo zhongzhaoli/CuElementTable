@@ -4,8 +4,8 @@ import {
   type HandleProps,
   type ComponentProps,
   type ComponentSize,
-  type TableColumnProps,
   type TableProps,
+  HandleColumnProps,
 } from './types.ts';
 import {
   DEFAULT_PAGE,
@@ -15,6 +15,7 @@ import {
   DEFAULT_COLUMN_SLOT_PREFIX,
   COMPONENT_SIZE_LIST,
   DEFAULT_HANDLE_SLOT_KEY,
+  SPECIAL_COLUMN,
 } from './constant.ts';
 import './index.css';
 import { Refresh, Operation, Open } from '@element-plus/icons-vue';
@@ -58,8 +59,15 @@ const CuElementTable = defineComponent({
   ],
   setup(props: ComponentProps, { slots, emit }) {
     const _size = ref(props.size);
+    const _columns = (props.table.columns || []).map((column) => {
+      return {
+        ...column,
+        show: ref(true),
+      };
+    });
+    const drawerVisible = ref(false);
     // 根据column的prop属性，获取对应的插槽内容
-    function getColumnSlot(column: TableColumnProps) {
+    function getColumnSlot(column: HandleColumnProps) {
       const slotName = `${DEFAULT_COLUMN_SLOT_PREFIX}${column.prop}`;
       return slots[slotName];
     }
@@ -68,7 +76,7 @@ const CuElementTable = defineComponent({
       return slots[DEFAULT_HANDLE_SLOT_KEY];
     }
     // 根据ElTableColumn的默认插槽default，放入我们自定义的插槽内容
-    function renderTableColumn(column: TableColumnProps) {
+    function renderTableColumn(column: HandleColumnProps) {
       const columnSlots: {
         default?: ColumnSlotCallback;
       } = {};
@@ -76,7 +84,11 @@ const CuElementTable = defineComponent({
       if (slot)
         columnSlots.default = (scope: Record<string, any>) => slot(scope);
 
-      return <el-table-column {...column}>{columnSlots}</el-table-column>;
+      return (
+        column.show && (
+          <el-table-column {...column}>{columnSlots}</el-table-column>
+        )
+      );
     }
     // 生成分页器
     function renderPagination() {
@@ -100,12 +112,12 @@ const CuElementTable = defineComponent({
         />
       );
     }
-    // 生成table
+    // 生成Table
     function renderTable() {
       const { table } = props;
       return (
         <el-table size={unref(_size)} {...table}>
-          {(table.columns || []).map((column: TableColumnProps) => {
+          {_columns.map((column: HandleColumnProps) => {
             return renderTableColumn(column);
           })}
         </el-table>
@@ -162,6 +174,9 @@ const CuElementTable = defineComponent({
         const tableRefresh = () => {
           emit('table-refresh');
         };
+        const openDrawer = () => {
+          drawerVisible.value = true;
+        };
         return (
           <>
             <div>
@@ -177,7 +192,7 @@ const CuElementTable = defineComponent({
               </el-dropdown>
             </div>
             <div>
-              <el-button circle icon={Open}></el-button>
+              <el-button circle icon={Open} onClick={openDrawer}></el-button>
             </div>
           </>
         );
@@ -189,11 +204,55 @@ const CuElementTable = defineComponent({
         </>
       );
     }
+    // 生成Drawer 字段管理
+    function renderDrawer() {
+      const close = () => {
+        drawerVisible.value = false;
+      };
+      const normalCheckBox = (column: HandleColumnProps) => {
+        return (
+          <el-checkbox
+            key="normal"
+            v-model={column.show.value}
+            label={column.prop}
+          >
+            {column.label}
+          </el-checkbox>
+        );
+      };
+      const specialCheckBox = (column: HandleColumnProps) => {
+        return (
+          <el-checkbox key={column.type} disabled={true} model-value={true}>
+            {SPECIAL_COLUMN[column.type as string]}
+          </el-checkbox>
+        );
+      };
+      const drawerSlot = {
+        default: () =>
+          _columns.map((column: HandleColumnProps) => {
+            return column.type && SPECIAL_COLUMN[column.type]
+              ? specialCheckBox(column)
+              : normalCheckBox(column);
+          }),
+      };
+      return (
+        <el-drawer
+          width="320px"
+          append-to-body
+          model-value={drawerVisible.value}
+          title="字段管理"
+          onClose={close}
+        >
+          {drawerSlot}
+        </el-drawer>
+      );
+    }
     return () => (
       <div className="cuElementTableContainer">
         <div className="cuHandleBox">
           {/* Handle */}
           {renderHandle()}
+          {renderDrawer()}
         </div>
         <div className="cuTableBox">
           {/* Table */}

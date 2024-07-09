@@ -6,6 +6,12 @@ export const DEFAULT_COLUMN_SLOT_PREFIX: string = 'table-';
 // 操作按钮插槽Key
 export const DEFAULT_HANDLE_SLOT_KEY: string = 'handle-left';
 
+// 表格特殊列
+export const SPECIAL_COLUMN: { [key: string]: string } = {
+  index: '索引',
+  selection: '选择',
+};
+
 // 默认组件大小
 export const DEFAULT_SIZE: ComponentSize = 'default';
 
