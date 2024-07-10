@@ -59,12 +59,15 @@ const CuElementTable = defineComponent({
   ],
   setup(props: ComponentProps, { slots, emit }) {
     const _size = ref(props.size);
-    const _columns = (props.table.columns || []).map((column) => {
-      return {
-        ...column,
-        show: ref(true),
-      };
-    });
+    const tableRef = ref();
+    const _columns = ref<HandleColumnProps[]>(
+      (props.table.columns || []).map((column) => {
+        return {
+          ...column,
+          show: true,
+        };
+      })
+    );
     const drawerVisible = ref(false);
     // 根据column的prop属性，获取对应的插槽内容
     function getColumnSlot(column: HandleColumnProps) {
@@ -115,13 +118,15 @@ const CuElementTable = defineComponent({
     // 生成Table
     function renderTable() {
       const { table } = props;
-      return (
-        <el-table size={unref(_size)} {...table}>
-          {_columns.map((column: HandleColumnProps) => {
+      const tableElement = (
+        <el-table ref="tableRef" size={unref(_size)} {...table}>
+          {unref(_columns).map((column: HandleColumnProps) => {
             return renderTableColumn(column);
           })}
         </el-table>
       );
+      tableRef.value = tableElement;
+      return tableElement;
     }
     // 生成Handle
     function renderHandle() {
@@ -211,11 +216,7 @@ const CuElementTable = defineComponent({
       };
       const normalCheckBox = (column: HandleColumnProps) => {
         return (
-          <el-checkbox
-            key="normal"
-            v-model={column.show.value}
-            label={column.prop}
-          >
+          <el-checkbox key="normal" v-model={column.show} label={column.prop}>
             {column.label}
           </el-checkbox>
         );
@@ -229,7 +230,7 @@ const CuElementTable = defineComponent({
       };
       const drawerSlot = {
         default: () =>
-          _columns.map((column: HandleColumnProps) => {
+          unref(_columns).map((column: HandleColumnProps) => {
             return column.type && SPECIAL_COLUMN[column.type]
               ? specialCheckBox(column)
               : normalCheckBox(column);

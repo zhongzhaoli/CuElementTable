@@ -30,6 +30,8 @@ const tableColumns: TableColumnProps[] = [
   },
   {
     label: 'Date',
+    minWidth: '180',
+    showOverflowTooltip: true,
     prop: 'date',
   },
   {
@@ -38,6 +40,7 @@ const tableColumns: TableColumnProps[] = [
   },
   {
     label: 'Address',
+    minWidth: '300',
     prop: 'address',
   },
 ];
