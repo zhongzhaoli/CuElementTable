@@ -95,8 +95,8 @@ const CuElementTable = defineComponent({
     }
     // 生成分页器
     function renderPagination() {
-      const _currentPage = props['v-model:currentPage'] || DEFAULT_PAGE;
-      const _pageSize = props['v-model:pageSize'] || DEFAULT_PAGE_SIZE;
+      const _currentPage = ref(props['v-model:currentPage'] || DEFAULT_PAGE);
+      const _pageSize = ref(props['v-model:pageSize'] || DEFAULT_PAGE_SIZE);
       const onPageChange = (pageNum: number) => {
         emit('update:currentPage', pageNum);
       };
@@ -106,9 +106,9 @@ const CuElementTable = defineComponent({
       return (
         <el-pagination
           size={unref(_size)}
-          defaultCurrentPage={_currentPage}
+          v-model:current-page={_currentPage}
+          v-model:page-size={_pageSize}
           total={props.total}
-          pageSize={_pageSize}
           layout={DEFAULT_PAGE_LAYOUT}
           onCurrentChange={onPageChange}
           onSizeChange={onSizeChange}
