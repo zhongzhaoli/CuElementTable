@@ -20,8 +20,8 @@ import {
 import './index.css';
 import { Refresh, Operation, Open } from '@element-plus/icons-vue';
 
-const CuElementTable = defineComponent({
-  name: 'CuElementTable',
+const TsxElementTable = defineComponent({
+  name: 'TsxElementTable',
   props: {
     // Normal
     size: {
@@ -255,7 +255,7 @@ const CuElementTable = defineComponent({
       );
     }
     return () => (
-      <div className="cuElementTableContainer">
+      <div className="TsxElementTableContainer">
         <div className="cuHandleBox">
           {/* Handle */}
           {renderHandle()}
@@ -274,4 +274,4 @@ const CuElementTable = defineComponent({
   },
 });
 
-export default CuElementTable;
+export default TsxElementTable;

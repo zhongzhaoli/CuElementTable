@@ -35,7 +35,7 @@ export interface ComponentProps {
   'v-model:currentPage'?: number;
 }
 
-declare module 'CuElementTable' {
+declare module 'TsxElementTable' {
   export const DEFAULT_COLUMN_SLOT_PREFIX: string;
   export const DEFAULT_HANDLE_SLOT_KEY: string;
   export const SPECIAL_COLUMN: { [key: string]: string };

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CuElementTable
+    <TsxElementTable
       :table="{
         columns: tableColumns,
         data: tableData,
@@ -12,16 +12,16 @@
       <template #table-name="{ row }">
         {{ row.name }}
       </template>
-    </CuElementTable>
+    </TsxElementTable>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import CuElementTable from './components/CuElementTable/index.tsx';
+import TsxElementTable from './components/TsxElementTable/index.tsx';
 import {
   HandleProps,
   type TableColumnProps,
-} from './components/CuElementTable/types.ts';
+} from './components/TsxElementTable/types.ts';
 const tableColumns: TableColumnProps[] = [
   {
     label: '',
