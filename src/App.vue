@@ -25,7 +25,7 @@ import {
 const tableColumns: TableColumnProps[] = [
   {
     label: '',
-    type: 'index',
+    type: 'selection',
     align: 'center',
   },
   {

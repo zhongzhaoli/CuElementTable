@@ -56,6 +56,7 @@ const CuElementTable = defineComponent({
     'size-change',
     'table-refresh',
     'handle-click',
+    'selection-change',
   ],
   setup(props: ComponentProps, { slots, emit }) {
     const _size = ref(props.size);
@@ -119,7 +120,12 @@ const CuElementTable = defineComponent({
     function renderTable() {
       const { table } = props;
       const tableElement = (
-        <el-table ref="tableRef" size={unref(_size)} {...table}>
+        <el-table
+          ref="tableRef"
+          size={unref(_size)}
+          {...table}
+          onSelectionChange={emit('selection-change')}
+        >
           {unref(_columns).map((column: HandleColumnProps) => {
             return renderTableColumn(column);
           })}
