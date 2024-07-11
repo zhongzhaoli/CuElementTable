@@ -34,3 +34,23 @@ export interface ComponentProps {
   'v-model:pageSize'?: number;
   'v-model:currentPage'?: number;
 }
+
+declare module 'CuElementTable' {
+  export const DEFAULT_COLUMN_SLOT_PREFIX: string;
+  export const DEFAULT_HANDLE_SLOT_KEY: string;
+  export const SPECIAL_COLUMN: { [key: string]: string };
+  export const DEFAULT_SIZE: ComponentSize;
+  export const DEFAULT_PAGE_SIZE: number;
+  export const DEFAULT_PAGE: number;
+  export const DEFAULT_PAGE_LAYOUT: string;
+  export const COMPONENT_SIZE_LIST: { value: ComponentSize; label: string }[];
+  export const TableColumnProps: TableColumnProps;
+  export const TableProps: TableProps;
+  export const HandleColumnProps: HandleColumnProps;
+  export const TableDataProps: TableDataProps;
+  export const ComponentSize: ComponentSize;
+  export const ButtonType: ButtonType;
+  export const ColumnSlotCallback: ColumnSlotCallback;
+  export const HandleProps: HandleProps;
+  export const ComponentProps: ComponentProps;
+}
