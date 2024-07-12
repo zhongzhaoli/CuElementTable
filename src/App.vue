@@ -17,11 +17,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import TsxElementTable from './components/TsxElementTable/index.tsx';
-import {
-  HandleProps,
-  type TableColumnProps,
-} from './components/TsxElementTable/types.ts';
+import TsxElementTable from 'Tsx-Element-Table';
+import { type TableColumnProps, HandleProps } from 'Tsx-Element-Table';
 const tableColumns: TableColumnProps[] = [
   {
     label: '',
@@ -42,6 +39,12 @@ const tableColumns: TableColumnProps[] = [
     label: 'Address',
     minWidth: '300',
     prop: 'address',
+  },
+  {
+    label: 'Date',
+    fixed: 'right',
+    width: '180',
+    prop: 'date',
   },
 ];
 const tableData = [
@@ -97,4 +100,14 @@ const handleList: HandleProps[] = [
 const total = 100;
 const currentPage = ref(2);
 </script>
-<style scoped></style>
+<style scoped>
+/* 临时 - 美观 */
+.TsxElementTableContainer {
+  max-width: 1000px;
+  border: 1px #eaeaea solid;
+  border-radius: 4px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+</style>
