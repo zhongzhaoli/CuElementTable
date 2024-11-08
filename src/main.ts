@@ -3,7 +3,7 @@ import ElementPlus from 'element-plus';
 import App from './App.vue';
 
 import 'element-plus/dist/index.css';
-import 'tsx-element-table/dist/style.css';
+import './item/index.css';
 
 const app = createApp(App);
 app.use(ElementPlus);

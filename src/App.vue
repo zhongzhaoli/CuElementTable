@@ -1,24 +1,59 @@
 <template>
   <div>
     <TsxElementTable
+      ref="tsxElementTableRef"
+      :tableColumns="tableColumns"
       :table="{
-        columns: tableColumns,
         data: tableData,
+        loading,
       }"
-      :handle-list="handleList"
-      :total="total"
-      v-model:current-page="currentPage"
+      :handle="{
+        show: true,
+        rightColumns,
+      }"
+      :pagination="{
+        total,
+      }"
+      v-model:currentPage="currentPage"
+      v-model:pageSize="pageSize"
+      @handle-right-click="handleRightClick"
     >
-      <template #table-name="{ row }">
-        {{ row.name }}
+      <template #table-date-header>
+        <span>日期123312</span>
       </template>
+      <template #table-date2>12312</template>
     </TsxElementTable>
+    <!-- <WebSocketComponet /> -->
+    <el-button @click="resetPage">清0</el-button>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import TsxElementTable from 'Tsx-Element-Table';
-import { type TableColumnProps, HandleProps } from 'Tsx-Element-Table';
+import TsxElementTable from './item';
+import { Download } from '@element-plus/icons-vue';
+// import WebSocketComponet from './webSocketComponent.vue';
+import {
+  type TableColumnProps,
+  HandleColumnProps,
+  ComponentInstance,
+  HandleRightColumnProps,
+} from './item/types';
+const tsxElementTableRef = ref<ComponentInstance | null>(null);
+const rightColumns = ref<HandleRightColumnProps[]>([
+  {
+    icon: Download,
+    tooltip: '数据导出',
+    key: 'download',
+    loading: false,
+  },
+]);
+const handleRightClick = (key: string) => {
+  rightColumns.value[0].loading = true;
+  setTimeout(() => {
+    console.log('handleRightClick', key);
+    rightColumns.value[0].loading = false;
+  }, 2000);
+};
 const tableColumns: TableColumnProps[] = [
   {
     label: '',
@@ -29,6 +64,7 @@ const tableColumns: TableColumnProps[] = [
     label: 'Date',
     minWidth: '180',
     showOverflowTooltip: true,
+    sortable: true,
     prop: 'date',
   },
   {
@@ -41,15 +77,87 @@ const tableColumns: TableColumnProps[] = [
     prop: 'address',
   },
   {
-    label: 'Date',
+    label: 'Date2',
     fixed: 'right',
     width: '180',
-    prop: 'date',
+    prop: 'date2',
   },
 ];
-const tableData = [
+const tableData = ref<any[]>([
   {
-    date: '2016-05-03',
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036',
+    tag: 'Home',
+  },
+  {
+    date: '2016-05-02',
     name: 'Tom',
     state: 'California',
     city: 'Los Angeles',
@@ -84,8 +192,8 @@ const tableData = [
     zip: 'CA 90036',
     tag: 'Office',
   },
-];
-const handleList: HandleProps[] = [
+]);
+const handleList: HandleColumnProps[] = [
   {
     key: 'create',
     label: '新增',
@@ -97,8 +205,14 @@ const handleList: HandleProps[] = [
     type: 'danger',
   },
 ];
-const total = 100;
-const currentPage = ref(2);
+const total = 11;
+const currentPage = ref(1);
+const pageSize = ref(10);
+const loading = ref(false);
+
+const resetPage = () => {
+  currentPage.value = 1;
+};
 </script>
 <style scoped>
 /* 临时 - 美观 */
